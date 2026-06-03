@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>transmissao_01</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Courier New", monospace;
+    color: #d0d0d0;
+    text-shadow: 0 0 5px rgba(255,255,255,0.4);
+}
+
+.message {
+    z-index: 10;
+    text-align: center;
+    letter-spacing: 4px;
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+
+.subtitle {
+    margin-top: 15px;
+    font-size: 0.75rem;
+    opacity: 0.4;
+}
+
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            rgba(255,255,255,0.03) 1px,
+            transparent 2px,
+            transparent 4px
+        );
+    z-index: 100;
+}
+
+.flicker {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.02);
+    animation: flicker 0.15s infinite;
+    pointer-events: none;
+    z-index: 99;
+}
+
+.noise {
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image:
+        radial-gradient(circle, white 1px, transparent 1px);
+    background-size: 4px 4px;
+    z-index: 98;
+    pointer-events: none;
+}
+
+@keyframes flicker {
+    0%   { opacity: 0.02; }
+    50%  { opacity: 0.06; }
+    100% { opacity: 0.02; }
+}
+
+.glitch {
+    animation: glitch 4s infinite;
+}
+
+@keyframes glitch {
+    0%, 100% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-1px, 1px);
+    }
+    40% {
+        transform: translate(1px, -1px);
+    }
+    60% {
+        transform: translate(-2px, 0);
+    }
+    80% {
+        transform: translate(2px, 0);
+    }
+}
+
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#overlay span {
+    color: #888;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+}
+</style>
+</head>
+<body>
+
+<!-- a transmissão começou antes de você chegar -->
+
+<div id="overlay">
+    <span>CLIQUE PARA INICIAR</span>
+</div>
+
+<div class="message glitch">
+    SEM SINAL
+
+    <div class="subtitle">
+        CANAL 03
+    </div>
+</div>
+
+<div class="noise"></div>
+<div class="flicker"></div>
+<div class="scanlines"></div>
+
+<audio id="bgm" loop>
+    <source src="Sinais.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const overlay = document.getElementById("overlay");
+const audio = document.getElementById("bgm");
+const message = document.querySelector(".message");
+
+overlay.addEventListener("click", async () => {
+    try {
+        await audio.play();
+    } catch (err) {
+        console.log("Erro ao iniciar áudio:", err);
+    }
+
+    overlay.style.display = "none";
+});
+
+let buffer = "";
+
+document.addEventListener("keydown", (event) => {
+    buffer += event.key.toLowerCase();
+
+    // Mantém apenas os últimos caracteres necessários
+    if (buffer.length > 6) {
+        buffer = buffer.slice(-6);
+    }
+
+    if (buffer === "teoria") {
+        message.innerHTML = `
+            VOCÊ CONSEGUE ME OUVIR?
+            <div class="subtitle">CANAL 0?</div>
+        `;
+    }
+});
+</script>
+
+</body>
+</html>
