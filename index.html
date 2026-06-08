@@ -168,20 +168,22 @@ let buffer = "";
 const originalMessage = message.innerHTML;
 
 document.addEventListener("keydown", (event) => {
+    if (event.key.length !== 1) return;
+
     buffer += event.key.toLowerCase();
 
     if (buffer.length > 10) {
         buffer = buffer.slice(-10);
     }
 
-    if (buffer === "teoria") {
+    if (buffer.includes("teoria")) {
         message.innerHTML = `
             VOCÊ CONSEGUE ME OUVIR?
             <div class="subtitle">CANAL 0?</div>
         `;
     }
 
-    if (buffer === "retorno") {
+    if (buffer.includes("retorno")) {
         message.innerHTML = originalMessage;
     }
 });
