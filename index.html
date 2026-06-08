@@ -165,12 +165,13 @@ overlay.addEventListener("click", async () => {
 
 let buffer = "";
 
+const originalMessage = message.innerHTML;
+
 document.addEventListener("keydown", (event) => {
     buffer += event.key.toLowerCase();
 
-    // Mantém apenas os últimos caracteres necessários
-    if (buffer.length > 6) {
-        buffer = buffer.slice(-6);
+    if (buffer.length > 10) {
+        buffer = buffer.slice(-10);
     }
 
     if (buffer === "teoria") {
@@ -178,6 +179,10 @@ document.addEventListener("keydown", (event) => {
             VOCÊ CONSEGUE ME OUVIR?
             <div class="subtitle">CANAL 0?</div>
         `;
+    }
+
+    if (buffer === "retorno") {
+        message.innerHTML = originalMessage;
     }
 });
 </script>
